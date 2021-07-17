@@ -85,7 +85,7 @@ class CrearToolTip(object):
 
 def open_file():
     filepath = askopenfilename(
-        filetypes=[("MQL Files", "*.mcl"), ("All Files", "*.*")]
+        filetypes=[("MQL Files", "*.mql"), ("All Files", "*.*")]
     )
     if not filepath:
         return
@@ -99,7 +99,7 @@ def open_file():
 def save_file():
     filepath = asksaveasfilename(
         defaultextension="mcl",
-        filetypes=[("MQL Files", "*.mcl"), ("All Files", "*.*")],
+        filetypes=[("MQL Files", "*.mql"), ("All Files", "*.*")],
     )
     if not filepath:
         return
@@ -158,7 +158,6 @@ def Sel_Conn():
 	
    filewin = tk.Toplevel(root)
    filewin.title("Connections")
-   #filewin.geometry('%dx%d+%d+%d' % (300, 200, 100, 100))
    filewin.geometry("+300+200")
    filewin.resizable(tk.FALSE,tk.FALSE)
    c0_button  = tk.Button(filewin, width=30, height=1 ,text=CONN_STR0, command=lambda: Set_Conn("0")) 
@@ -183,40 +182,6 @@ def Close():
     if res == 'yes':
        ws.destroy()
 
-"""
-def Read_Collection():     
-    docs = mycol.find({}) 
-    tv.delete(*tv.get_children())
-    i=0  
-    for (doc ) in docs:
-       #print(doc)
-       tv.insert(parent='', index=i, iid=i, values=(doc["_id"],doc["source"], doc["date"],doc["country"],doc["sector"],doc["company"]))
-       i=i+1
-       
-def Read_Doc(n):     
-    doc = mycol.find_one({}) 
-    i=0  
-    print("read_doc"+n)
-    Det_source.delete(0, tk.END) ; Det_source.insert(0,doc["source"]  )
- 
-def selectItem(a):
-    curItem = tv.focus()
-    #print (tv.item(curItem)) 
-    DocID=tv.item(curItem)["values"][0] 
-    #print (DocID)
-    doc = mycol.find_one({"_id": ObjectId(DocID)})
-    #print(doc)
-    Det_id["state"] = "normal"
-    Det_id.delete(0, tk.END)     ;  Det_id.insert(0,str(doc["_id"])  )
-    Det_id["state"] = "disabled"
-    Det_source.delete(0, tk.END) ;  Det_source.insert(0,doc["source"]  )
-    Det_date.delete(0, tk.END)   ;  Det_date.insert(0,doc["date"]  )
-    Det_country.delete(0, tk.END);  Det_country.insert(0,doc["country"]  )
-    Det_sector.delete(0, tk.END) ;  Det_sector.insert(0,doc["sector"]  )
-    Det_company.delete(0, tk.END);  Det_company.insert(0,doc["company"]  )
-    Det_description.delete('0.0', tk.END) ; Det_description.insert(tk.INSERT,doc["job_description"]  )
-    Det_expertice.delete('0.0', tk.END)   ; Det_expertice.insert( tk.INSERT,doc["job_expertice"]  )
-"""
 def selectItem_dbs(a):
     curItem = dbs_tv.focus()
     dbname=dbs_tv.item(curItem)["values"][0]  
@@ -240,126 +205,7 @@ def selectItem_col(a):
        json_str = dumps(doc, indent = 4)
        st_data.insert(tk.INSERT,json_str +" \n")
     
-def Arrow_up(a):
-    res = messagebox.askquestion('Arrow', 'Up')
-
-def Arrow_down(a):
-    print ("Down")       
-
-""" 
-def Modify_Doc():
-  if (Det_source.get()!=''):
-    res = messagebox.askquestion('Modify', 'Do you want to MODIFY Doc ?')
-    if res == 'yes':
-      ID=(Det_id.get()) 
-      myquery = {"_id" : ObjectId(ID)}
-      source=Det_source.get()
-      date=Det_date.get()
-      country=Det_country.get()
-      sector =Det_sector.get()
-      company=Det_company.get()
-      job_desc= Det_description.get(1.0, tk.END)
-      job_expe= Det_expertice.get(1.0, tk.END)
-      mydict  =  { "$set": { "source":source,"date":date,"country": country, "sector":sector,"company": company,"job_description":job_desc,"job_expertice":job_expe }}
-      try:
-        x = mycol.update_one(myquery,mydict)
-        messagebox.showinfo(title="Status", message="Writed one record" ) 
-      except :
-        messagebox.showinfo(title="Status", message="Error writing data to MongoDB table ! " )   
-      Read_Collection()
-       
-def Delete_Doc():
-  if (Det_source.get()!=''):
-    res = messagebox.askquestion('Delete', 'Do you want to DELETE Doc ?')
-    if res == 'yes':
-       ID=(Det_id.get()) 
-       myquery = {"_id" : ObjectId(ID)}
-       try:
-          mycol.delete_one(myquery)
-          Read_Collection()
-          source=Det_source.get()
-          date=Det_date.get()
-          country=Det_country.get()
-          sector =Det_sector.get()
-          company=Det_company.get()
-          job_desc= Det_description.get(1.0, tk.END)
-          job_expe= Det_expertice.get(1.0, tk.END)
-          messagebox.showinfo(title="Status", message="Delete one record" ) 
-          Det_id.delete(0, tk.END)      
-          Det_source.delete(0, tk.END)  
-          Det_date.delete(0, tk.END)   
-          Det_country.delete(0, tk.END) 
-          Det_sector.delete(0, tk.END)  
-          Det_company.delete(0, tk.END) 
-          Det_description.delete('0.0', tk.END)  
-          Det_expertice.delete('0.0', tk.END)
-       except :
-          messagebox.showinfo(title="Status", message="Error writing data to MongoDB table ! " )      
-
-def Add_Doc():
-    Det_id.delete(0, tk.END)      
-    Det_source.delete(0, tk.END)  
-    Det_date.delete(0, tk.END)   
-    Det_country.delete(0, tk.END) 
-    Det_sector.delete(0, tk.END)  
-    Det_company.delete(0, tk.END) 
-    Det_description.delete('0.0', tk.END)  
-    Det_expertice.delete('0.0', tk.END)
-    Det_id["state"]     = "disabled"
-    modify_btn["state"] = "disabled"
-    add_btn["state"]    = "disabled"
-    delete_btn["state"] = "disabled"
-    post_btn["state"]   = "normal"
-    cancel_btn["state"] = "normal"
-       
-def Post_Doc():
-    res = messagebox.askquestion('Post', 'Do you want to POST Doc ?')
-    if res == 'yes':
-      source=Det_source.get()
-      date=Det_date.get()
-      country=Det_country.get()
-      sector =Det_sector.get()
-      company=Det_company.get()
-      job_desc= Det_description.get(1.0, tk.END)
-      job_expe= Det_expertice.get(1.0, tk.END)
-      mydict = { "source":source,"date":date,"country": country, "sector":sector,"company": company,"job_description":job_desc,"job_expertice":job_expe }
-      try:
-        x = mycol.insert_one(mydict)
-        messagebox.showinfo(title="Estatus", message="Writed one record" ) 
-        Read_Collection()
-      except :
-        print("Error writing data to MongoDB table" )
-    Det_id.delete(0, tk.END)      
-    Det_source.delete(0, tk.END)  
-    Det_date.delete(0, tk.END)   
-    Det_country.delete(0, tk.END) 
-    Det_sector.delete(0, tk.END)  
-    Det_company.delete(0, tk.END) 
-    Det_description.delete('0.0', tk.END)  
-    Det_expertice.delete('0.0', tk.END)
-    #Det_id["state"] = "normal"
-    modify_btn["state"] = "normal"   
-    add_btn["state"]    = "normal"
-    delete_btn["state"] = "normal"
-    post_btn["state"]   = "disable"
-    cancel_btn["state"] = "disable"
  
-def Cancel_Doc():
-    Det_id.delete(0, tk.END)      
-    Det_source.delete(0, tk.END)  
-    Det_date.delete(0, tk.END)   
-    Det_country.delete(0, tk.END) 
-    Det_sector.delete(0, tk.END)  
-    Det_company.delete(0, tk.END) 
-    Det_description.delete('0.0', tk.END)  
-    Det_expertice.delete('0.0', tk.END)
-    #Det_id["state"] = "normal"
-    modify_btn["state"] = "normal"   
-    add_btn["state"]    = "normal"
-    delete_btn["state"] = "normal"
-    post_btn["state"]   = "disable"
-    cancel_btn["state"] = "disable"
-"""
     
 def Exe_Query():     
     mydb = myclient[DB_combo.get()]
@@ -373,7 +219,6 @@ def Exe_Query():
       st_query_result.delete('1.0', tk.END)
       st_query_result.insert(tk.INSERT,"[\n")
       for doc in mydoc:
-         #pprint.pprint (doc)
          json_str = dumps(doc, indent = 4)
          st_query_result.insert(tk.INSERT,json_str+",\n")
       st_query_result.insert(tk.INSERT,"]\n")    
@@ -382,9 +227,7 @@ def Exe_Query():
       
 def Exe_Command():     
     mydb = myclient[my_DB.get()]
-    #mycol = mydb[my_Col.get()]
     mycommandS = st_command.get(1.0, tk.END)
-    #mycommand = json.loads( mycommandS) string = string[:-1]
     print (mycommandS)
     try:
       mydoc = mydb.command(mycommandS[:-1])
@@ -401,7 +244,6 @@ def Exe01_Command(N):
        mydb  = myclient[DB_combo.get()]
     if (Col_combo.get()!=""):
        mycol = mydb[Col_combo.get()]
-    #mycommandS = st_command.get(1.0, tk.END)
     st_query_result.delete('1.0', tk.END)
     try:
       if   (N=='0'):
@@ -514,18 +356,15 @@ def Docs(N):
     webbrowser.get('firefox').open(url)
     
 def DB_combo_select(event):
-     #print("New Element Selected  " + str(DB_combo.current()) + " " + str(DB_combo.get()) )
      mydb = myclient[DB_combo.get()]
      Col_combo.set('')
      Col_combo.delete(0, tk.END)
      Col_combo["values"]=mydb.list_collection_names()
 
 def pm_st_query_result_show(event):
-   # display the popup menu
    try:
       pm_st_query_result.tk_popup(event.x_root, event.y_root, 0)
    finally:
-      #Release the grab
       pm_st_query_result.grab_release()     
 
 def Connect():   
@@ -556,7 +395,6 @@ def Connect():
           dbs_tv.insert(parent='', index=i, iid=i, values=(dbs))
           i=i+1 
       DB_combo["values"]=(pymongo.MongoClient(CONN_STR,serverselectiontimeoutms=200).list_database_names())    
-      #Read_Collection()        
    except  pymongo.errors.PyMongoError as e:
       messagebox.showwarning(title="Error", message="MongoDb not reachable .." + str(e))
       exit()
@@ -627,7 +465,6 @@ pm_st_query_result.add_command(label="Read JSON",command=read_json)
 pm_st_query_result.add_separator()
 pm_st_query_result.add_command(label="Copy to Clipboard",command=copy_clipboard)
 st_query_result.bind("<Button-3>", pm_st_query_result_show)
-
 # End second tab
 
 """ -------  """
@@ -783,8 +620,6 @@ menubar.add_cascade(label="Help"       , menu=helpmenu)
 
 root.config(menu=menubar)
 
-#CONN_STR=CONN_STR0
-#Connect() 
 Sel_Conn()
   
 root.mainloop()
