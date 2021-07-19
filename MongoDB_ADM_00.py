@@ -29,6 +29,7 @@ PATH_FIREFOX      ='C://Program Files//Mozilla Firefox//firefox.exe'
 PATH_MONGODB_TOOLS="C:\\Program Files\MongoDB\\Tools\\100\\bin\\"
 PATH_MONGODB_BIN  ="C:\\Program Files\MongoDB\\Server\\4.4\\bin\\"
 PATH_MONGODB_SH   ="C:\\Program Files\MongoDB\\mongosh\\"
+PATH_MONGODB_SH   ="C:\\Varios\\MongoDB\\"
 PATH_BACKUP       ="C:\\Varios\\MongoDB\\Dump"
 PATH_EXPORT       ="C:\\Varios\\MongoDB\\Export\\"
 
@@ -205,8 +206,6 @@ def selectItem_col(a):
        json_str = dumps(doc, indent = 4)
        st_data.insert(tk.INSERT,json_str +" \n")
     
- 
-    
 def Exe_Query():     
     mydb = myclient[DB_combo.get()]
     mycol = mydb[Col_combo.get()]
@@ -218,10 +217,13 @@ def Exe_Query():
     try:
       st_query_result.delete('1.0', tk.END)
       st_query_result.insert(tk.INSERT,"[\n")
+      i=0
       for doc in mydoc:
          json_str = dumps(doc, indent = 4)
          st_query_result.insert(tk.INSERT,json_str+",\n")
-      st_query_result.insert(tk.INSERT,"]\n")    
+         i=i+1
+      st_query_result.insert(tk.INSERT,"]\n")   
+      NR_entry.delete(0,tk.END) ; NR_entry.insert(0,str(i)) 
     except  pymongo.errors.PyMongoError as e:
       messagebox.showwarning(title="Error", message="MongoDb not reachable .." + str(e))  
       
@@ -428,7 +430,7 @@ notebook.add(frame4, text='  MongoDB Tools  ')
 # End notebook section
 
 """ -------  """
-# Second tab
+# First tab
 tab2_frame = tk.Frame(frame2, bd=0, relief=tk.SOLID, padx=5, pady=5 ) 
 tab2_frame.place(x=5, y=5,height=570, width=1150)
 st_query = scrolledtext.ScrolledText(tab2_frame, font=('Lucida', 11), width = 60, height = 30)
@@ -443,14 +445,24 @@ st_query.place(x=5, y=5)
 
 DB_combo = ttk.Combobox(tab2_frame, state="readonly" )
 DB_combo.bind("<<ComboboxSelected>>", DB_combo_select)
+CrearToolTip(DB_combo," DataBases ")
+DB_combo.set('test')
 DB_combo.place(x=5, y=540)
 
 Col_combo = ttk.Combobox(tab2_frame, state="readonly" )
+CrearToolTip(Col_combo," Collections ")
+Col_combo.set('airbnb')
 Col_combo.place(x=155, y=540)
 
 query_btn = tk.Button(tab2_frame, width=5, height=1 ,text='Query', font=('Lucida', 9,'bold'), command=Exe_Query)
 CrearToolTip(query_btn," Execute query ")
-query_btn.place(x=460, y=540)
+query_btn.place(x=405, y=540)
+
+NR_entry = ttk.Entry(tab2_frame,width=6)
+CrearToolTip(NR_entry," Number of documents retrieved ")
+NR_entry.place(x=460, y=540)
+
+ 
 
 find_one_btn = tk.Button(tab2_frame, width=7, height=1 ,text='find one', font=('Lucida', 9,'bold'), command=lambda: Exe01_Command("5"))
 CrearToolTip(find_one_btn," find one ")
@@ -465,10 +477,10 @@ pm_st_query_result.add_command(label="Read JSON",command=read_json)
 pm_st_query_result.add_separator()
 pm_st_query_result.add_command(label="Copy to Clipboard",command=copy_clipboard)
 st_query_result.bind("<Button-3>", pm_st_query_result_show)
-# End second tab
+# End First tab
 
 """ -------  """
-# Third tab
+# Second tab
 #Server Info Frame
 tab3_frame = tk.Frame(frame3, bd=1, relief=tk.SOLID, padx=5, pady=5 ) 
 tab3_frame.place(x=5, y=5)
@@ -493,10 +505,9 @@ dbs_sb = tk.Scrollbar(dbs_frame, orient=tk.VERTICAL)
 dbs_sb.pack(side=tk.RIGHT, fill=tk.Y)
 dbs_tv.config(yscrollcommand=dbs_sb.set)
 dbs_sb.config(command=dbs_tv.yview)
-
 #End DBS Frame 
 
-#Collection Frame inside tab3_frame
+# Collection Frame inside tab3_frame
 col_frame = tk.Frame(frame3, bd=1, relief=tk.SOLID, padx=5, pady=5)
 col_frame.place(x=155, y=165)
 col_tv = ttk.Treeview(col_frame, columns=(1), show='headings', height=19 )
@@ -507,7 +518,7 @@ col_sb = tk.Scrollbar(col_frame, orient=tk.VERTICAL)
 col_sb.pack(side=tk.RIGHT, fill=tk.Y)
 col_tv.config(yscrollcommand=col_sb.set)
 col_sb.config(command=col_tv.yview)
-#End Collection Frame 
+# End Collection Frame 
 
 # MongoDB Tools frame
 com_col_frame = tk.Frame(frame3, bd=1, relief=tk.SOLID, padx=5, pady=5)
@@ -582,7 +593,7 @@ st_data = scrolledtext.ScrolledText(data_frame, font=('Lucida Console', 9), widt
 st_data.grid(row=1, column=1, pady=2, padx=5 )
 #End Data Frame 
 
-# End third tab
+# End Second tab
 
 """ ----------  """
 #Menu bar

@@ -1,0 +1,46 @@
+.-Librerias Python
+   pymongo y mongoengine
+   https://www.djongomapper.com/
+
+.-Operaciones/Utilidades (RazorSQL) 
+   Database Browser
+   Query Editor
+   Import Tool
+   Export Tool
+
+.- Consultas SQL en NoSQL MongoDB
+
+El lenguaje SQL es muy poderoso, ya que se ejecuta con un solo comando instrucciones SQL para todo
+tipo de operaciones: crear/moidficar/eliminar una table/indice/vista , consultar/modificar/agregar/eliminar filas,
+etc
+En el caso de MongoDB tenemos que ejecutar comandos diferentes dependiendo de lo que queramos
+hacer.
+
+Existen Gestores de BBDD MongoDB que permite ejecutar sentencias SQL
+RazorSQL, NoSQLBooater
+
+Tambien hay paginas en la web que permiten traducir sentencias SQL a MongoDB QDL 
+
+HINTS:
+
+1.- Backup / Restore
+    Backup all collections of a database in a date folder. The files are gziped:
+      mongodump --db somedb --gzip --out /backups/`date +"%Y-%m-%d"`
+    Or for a single archive:
+      mongodump --db somedb --gzip --archive > dump_`date "+%Y-%m-%d"`.gz
+      TheCommand = '\"\"C:\\Program Files\\Sun\\VirtualBox\\VBoxManage.exe\" ' \
+                   + ' clonehd \"' + OrigFile + '\" \"' + NewFile + '\"\"'
+       os.system(TheCommand)
+
+2.- Import / Export
+    mongoimport --type csv -d test -c products --headerline --drop \varios\download\gemini.csv
+    mongoimport --db test --collection inventory      --drop --file \varios\download\inventory.crud.json
+     mongoexport --host <host_name> --username <user_name> --password <password> 
+	             --db <database_name> --collection <collection_name> --out <output_file>
+
+3.- Convertir un scrypt en ejecutable
+    pyinstaller –onefile app.py –windowed
+
+4.- tkinter designers
+    https://github.com/alejandroautalan/pygubu
+    https://sourceforge.net/projects/page/
