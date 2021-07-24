@@ -1,0 +1,14 @@
+find(
+{  "address.country": { "$in": [ "Spain", "Brazil"] },
+   "bedrooms":{ "$gt": 2 },
+   "number_of_reviews":{ "$gt": 4 },
+   "beds":{ "$gt": 4 },
+   "amenities": { "$in": [ "TV","Wifi","Iron"] },
+   "price":{ "$lt": 1500 },
+   "accommodates": { "$gt": 4 }
+}
+,
+{"address.country":1,"address.market":1,"bedrooms":1,
+ "number_of_reviews":1 ,"beds":1,"amenities":1,"price":1,
+  "cancellation_policy": 1,"accommodates":1}
+)
